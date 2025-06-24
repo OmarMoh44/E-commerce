@@ -1,0 +1,13 @@
+enum Method {
+    PayPal
+    Visa
+    MasterCard
+}
+
+model Payment {
+    id      Int    @id @default(autoincrement())
+    method  Method
+    amount  Int
+    user_id Int
+    user    User   @relation(fields: [user_id], references: [id])
+}

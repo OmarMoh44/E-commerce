@@ -1,0 +1,11 @@
+model Product {
+    id          Int         @id @default(autoincrement())
+    name        String
+    price       Int
+    desc        String
+    category_id Int
+    order_id    Int
+    order       Order       @relation(fields: [order_id], references: [id])
+    category    ProCategory @relation(fields: [category_id], references: [id])
+    carts       Cart[]
+}
