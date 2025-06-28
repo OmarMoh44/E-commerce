@@ -1,14 +1,13 @@
-enum Status {
-    OnWay
-    Delivered
-}
-
 model Order {
-    id       Int       @id @default(autoincrement())
-    amount   Int
-    date     DateTime
-    status   Status
-    user_id  Int
-    user     User      @relation(fields: [user_id], references: [id])
-    products Product[]
+    id           Int      @id @default(autoincrement())
+    user         User     @relation(fields: [user_id], references: [id])
+    user_id      Int
+    address      Address  @relation(fields: [address_id], references: [id])
+    address_id   Int
+    status       String
+    order_date   DateTime @default(now())
+    total_amount Float
+
+    payment Payment?
+    items   OrderItem[]
 }

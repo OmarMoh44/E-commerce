@@ -1,7 +1,12 @@
 model Address {
-    id      Int    @id @default(autoincrement())
-    country String
-    city    String
-    user_id Int
-    user    User   @relation(fields: [user_id], references: [id])
+    id         Int     @id @default(autoincrement())
+    user       User    @relation(fields: [user_id], references: [id])
+    user_id    Int
+    full_name  String
+    city       String
+    country    String
+    phone      String
+    is_default Boolean
+
+    orders Order[]
 }

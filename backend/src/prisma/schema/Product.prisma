@@ -1,11 +1,20 @@
 model Product {
-    id          Int         @id @default(autoincrement())
-    name        String
-    price       Int
-    desc        String
+    id          Int      @id @default(autoincrement())
+    seller      User     @relation("SellerProducts", fields: [seller_id], references: [id])
+    seller_id   Int
+    title       String
+    description String
+    price       Float
+    discount    Float
+    stock       Int
+    category    Category @relation(fields: [category_id], references: [id])
     category_id Int
-    order_id    Int
-    order       Order       @relation(fields: [order_id], references: [id])
-    category    ProCategory @relation(fields: [category_id], references: [id])
-    carts       Cart[]
+    brand       String
+    created_at  DateTime @default(now())
+    is_active   Boolean
+
+    images     ProductImage[]
+    reviews    Review[]
+    orderItems OrderItem[]
+    cartItems  CartItem[]
 }

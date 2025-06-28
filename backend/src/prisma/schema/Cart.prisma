@@ -1,5 +1,6 @@
 model Cart {
-    id       Int       @id @default(autoincrement())
-    user_id  Int
-    products Product[]
+    id      Int        @id @default(autoincrement())
+    user    User       @relation(fields: [user_id], references: [id])
+    user_id Int        @unique
+    items   CartItem[]
 }
