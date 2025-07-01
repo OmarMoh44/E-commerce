@@ -26,6 +26,7 @@
     "schema": "src/prisma/schema/"
   },
   "dependencies": {
+    "@apollo/server": "^4.12.2",
     "@faker-js/faker": "^9.2.0",
     "@prisma/client": "^5.20.0",
     "axios": "^1.7.9",
@@ -34,10 +35,10 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
-    "express-async-handler": "^1.2.0",
     "express-session": "^1.18.1",
     "firebase-admin": "^13.0.1",
     "google-auth-library": "^9.14.1",
+    "graphql": "^16.11.0",
     "ioredis": "^5.4.1",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
@@ -98,8 +99,7 @@
     "@DB": "./dist/prisma/PrismaClient",
     "@services": "./dist/services",
     "@validators": "./dist/validators",
-    "@routes": "./dist/routes",
-    "@models": "./dist/models",
+    "@schema": "./dist/schema",
     "@src": "./dist",
     "@test": "./dist/__tests__"
   }
