@@ -1,29 +1,49 @@
 import prisma from "@DB"
 import bcrypt from 'bcrypt';
-import { UserInfo } from "@src/models/user";
+import { UserInfo } from "@models/user";
+import { GraphQLError } from "graphql";
 
 
-async function findUserByEmail(email: string) {
+export async function findUserByEmail(email: string) {
     const user = await prisma.user.findUnique({
         where: {
             email
         }
     });
-    if (!user) throw Error("User is not found");
+    if (!user)
+        throw new GraphQLError("Email is not correct", {
+            extensions: { code: 'BAD_USER_INPUT' }
+        });
     return user;
 }
 
-async function findUserById(id: number) {
+export async function findUserById(id: number) {
     const user = await prisma.user.findUnique({
         where: {
             id
         }
     });
-    if (!user) throw Error("User is not found");
+    if (!user)
+        throw new GraphQLError("User is not found", {
+            extensions: { code: 'BAD_USER_INPUT' }
+        });
     return user;
 }
 
-async function createUser(userDate: UserInfo) {
+export async function findUserByOrder(order_id: number) {
+    const order = await prisma.order.findUnique({
+        where: { id: order_id },
+        include: { user: true },
+    });
+    if (!order?.user) {
+        throw new GraphQLError("Order not found or user missing", {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+    return order.user;
+}
+
+export async function createUser(userDate: UserInfo) {
     try {
         const password_hash = bcrypt.hashSync(userDate.password, 10);
         const user = await prisma.user.create({
@@ -36,10 +56,37 @@ async function createUser(userDate: UserInfo) {
         return user;
     } catch (err) {
         console.log('Error in creating user account');
-        throw Error('Error in creating user account');
+        throw new GraphQLError("Error in creating user account", {
+            extensions: { code: 'INTERNAL_SERVER_ERROR' }
+        });
     }
 }
 
+export async function deleteUser(user_id: number) {
+    try {
+        return await prisma.user.delete({
+            where: {
+                id: user_id
+            }
+        });
+    } catch (error) {
+        console.log('Error in deleting user account');
+        throw new GraphQLError("Error in deleting user account", {
+            extensions: { code: 'INTERNAL_SERVER_ERROR' }
+        });
+    }
+}
 
-
-export { findUserByEmail, findUserById, createUser };
+export async function updateUser(data: any, user_id: number) {
+    try {
+        return await prisma.user.update({
+            where: { id: user_id },
+            data
+        })
+    } catch (error) {
+        console.log('Error in updating user account');
+        throw new GraphQLError("Error in updating user account", {
+            extensions: { code: 'INTERNAL_SERVER_ERROR' }
+        });
+    }
+}

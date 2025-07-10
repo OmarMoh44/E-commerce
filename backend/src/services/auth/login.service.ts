@@ -1,5 +1,6 @@
 import { findUserByEmail } from "@services/prisma/user.service";
 import bcrypt from 'bcrypt';
+import { GraphQLError } from "graphql";
 
 async function verifyLogin(email: string, password: string) {
     try {
@@ -14,8 +15,10 @@ async function verifyLogin(email: string, password: string) {
 
 function checkPassword(password: string, hashedPassword: string) {
     if (!bcrypt.compareSync(password, hashedPassword))
-        throw Error("Password is not correct");
+        throw new GraphQLError('Password is not correct', {
+            extensions: { code: 'BAD_USER_INPUT' }
+        })
 }
 
 
-export { verifyLogin };
+export { verifyLogin, checkPassword };

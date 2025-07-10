@@ -100,6 +100,7 @@
     "@services": "./dist/services",
     "@validators": "./dist/validators",
     "@schema": "./dist/schema",
+    "@models": "./dist/models",
     "@src": "./dist",
     "@test": "./dist/__tests__"
   }

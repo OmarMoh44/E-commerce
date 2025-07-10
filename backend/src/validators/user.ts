@@ -13,13 +13,13 @@ const validateSignUp = (user: UserInfo): any => {
 
 const validateEmail = (email: any) => {
     const schema: ObjectSchema = Joi.object({
-        email: Joi.string()
+        email: Joi.string().label('email')
             .email()
             .messages({
-                "string.base": "email must be a string",
-                "string.empty": "email cannot be empty",
-                "string.email": "email must be a valid email",
-                "any.required": "email is required",
+                "string.base": "{{#label}} must be a string",
+                "string.empty": "{{#label}} cannot be empty",
+                "string.email": "{{#label}} must be a valid email",
+                "any.required": "{{#label}} is required",
             })
             .required(),
     });
@@ -36,15 +36,15 @@ const validateEmail = (email: any) => {
 
 const validatePassword = (password: any) => {
     const schema: ObjectSchema = Joi.object({
-        password: Joi.string()
+        password: Joi.string().label('password')
             .min(6)
             .max(50)
             .messages({
-                "string.base": "password must be a string",
-                "string.empty": "password cannot be empty",
-                "string.min": "password must be at least 6 characters",
-                "string.max": "password must be at most 50 characters",
-                "any.required": "password is required",
+                "string.base": "{{#label}} must be a string",
+                "string.empty": "{{#label}} cannot be empty",
+                "string.min": "{{#label}} must be at least 6 characters",
+                "string.max": "{{#label}} must be at most 50 characters",
+                "any.required": "{{#label}} is required",
             })
             .required(),
     });
@@ -61,16 +61,16 @@ const validatePassword = (password: any) => {
 
 const validateConfirmPassword = (password: any, confirmPassword: any) => {
     const schema: ObjectSchema = Joi.object({
-        password: Joi.string().required().messages({
-            "string.base": "password must be a string",
-            "string.empty": "password cannot be empty",
-            "any.required": "password is required",
+        password: Joi.string().label('password').required().messages({
+            "string.base": "{{#label}} must be a string",
+            "string.empty": "{{#label}} cannot be empty",
+            "any.required": "{{#label}} is required",
         }),
-        confirmPassword: Joi.string().valid(Joi.ref("password")).required().messages({
+        confirmPassword: Joi.string().label('confirm password').valid(Joi.ref("password")).required().messages({
             "any.only": "passwords don't match",
-            "string.base": "confirm password must be a string",
-            "string.empty": "confirm password cannot be empty",
-            "any.required": "confirm password is required",
+            "string.base": "{{#label}} must be a string",
+            "string.empty": "{{#label}} cannot be empty",
+            "any.required": "{{#label}} is required",
         }),
     });
     const error: ValidationError | undefined = schema.validate(
@@ -86,15 +86,15 @@ const validateConfirmPassword = (password: any, confirmPassword: any) => {
 
 const validateName = (name: any) => {
     const schema: ObjectSchema = Joi.object({
-        name: Joi.string()
+        name: Joi.string().label('name')
             .min(6)
             .max(50)
             .messages({
-                "string.base": "name must be a string",
-                "string.empty": "name cannot be empty",
-                "string.min": "name must be at least 6 characters",
-                "string.max": "name must be at most 50 characters",
-                "any.required": "name is required",
+                "string.base": "{{#label}} must be a string",
+                "string.empty": "{{#label}} cannot be empty",
+                "string.min": "{{#label}} must be at least 6 characters",
+                "string.max": "{{#label}} must be at most 50 characters",
+                "any.required": "{{#label}} is required",
             })
             .required(),
     });
@@ -111,13 +111,13 @@ const validateName = (name: any) => {
 
 const validatePhoneNumber = (phoneNumber: any) => {
     const schema: ObjectSchema = Joi.object({
-        phoneNumber: Joi.string()
+        phoneNumber: Joi.string().label('phone number')
             .pattern(/^\+[0-9\-\s]+$/) // start with + and allow only numbers and - and white spaces
             .messages({
-                "string.base": "phone number must be a string",
-                "string.empty": "phone number cannot be empty",
-                "string.pattern.base": "phone number structure is not valid",
-                "any.required": "phone number is required",
+                "string.base": "{{#label}} must be a string",
+                "string.empty": "{{#label}} cannot be empty",
+                "string.pattern.base": "{{#label}} structure is not valid",
+                "any.required": "{{#label}} is required",
             })
             .required(),
     });
@@ -160,4 +160,4 @@ function checkPhoneNumber(phoneNumber: string) {
 
 
 
-export { validateEmail, validatePassword, validateSignUp }
+export { validateEmail, validatePassword, validateSignUp, validateName, validatePhoneNumber }
