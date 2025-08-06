@@ -47,3 +47,33 @@ export async function deleteCategory(category_id: number) {
         });
     }
 }
+
+export async function findParentByChildId(category_id: number) {
+    try {
+        const category = await prisma.category.findUnique({
+            where: { id: category_id },
+            include: { parent: true }
+        });
+        return category?.parent || null;
+    } catch (error) {
+        console.log("Error in finding parent category by child ID");
+        throw new GraphQLError("Error in finding parent category", {
+            extensions: { code: 'INTERNAL_SERVER_ERROR' }
+        });
+    }
+
+}
+
+export async function findChildrenByParentId(parent_id: number) {
+    try {
+        const categories = await prisma.category.findMany({
+            where: { parent_id }
+        });
+        return categories;
+    } catch (error) {
+        console.log("Error in finding children categories by parent ID");
+        throw new GraphQLError("Error in finding children categories", {
+            extensions: { code: 'INTERNAL_SERVER_ERROR' }
+        });
+    }
+}

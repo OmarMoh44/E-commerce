@@ -2,7 +2,11 @@ import prisma from "@DB";
 import { GraphQLError } from "graphql";
 
 export async function findCartByUser(user_id: number) {
-    return await prisma.cart.findUnique({ where: { user_id } });
+    const cart = await prisma.cart.findUnique({ where: { user_id } });
+    if (!cart) throw new GraphQLError("Cart is not found", {
+        extensions: { code: "NOT_FOUND" }
+    });
+    return cart;
 }
 
 export async function createCart(user_id: number) {
@@ -14,4 +18,8 @@ export async function createCart(user_id: number) {
             extensions: { code: 'INTERNAL_SERVER_ERROR' }
         });
     }
+}
+
+export async function findCartItems(cart_id: number) {
+    return await prisma.cartItem.findMany({ where: { cart_id } });
 }

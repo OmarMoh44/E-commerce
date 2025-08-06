@@ -13,8 +13,8 @@ model Product {
     created_at  DateTime @default(now())
     is_active   Boolean  @default(true)
 
-    images     ProductImage[]
     reviews    Review[]
     orderItems OrderItem[]
     cartItems  CartItem[]
+    wishlist   Wishlist[]
 }

@@ -2,21 +2,22 @@ import { Role } from "@prisma/client"
 import { GraphQLError } from "graphql";
 
 const requireAdmin = (context: any) => {
-    if (context.role !== Role.Admin)
+    if (context.user.role !== Role.Admin)
         throw new GraphQLError('Authorization required', {
             extensions: { code: 'FORBIDDEN' }
         });
 }
 
 const requireBuyer = (context: any) => {
-    if (context.role !== Role.Buyer)
+    console.log(context.user.role)
+    if (context.user.role !== Role.Buyer)
         throw new GraphQLError('Authorization required', {
             extensions: { code: 'FORBIDDEN' }
         });
 }
 
 const requireSeller = (context: any) => {
-    if (context.role !== Role.Seller)
+    if (context.user.role !== Role.Seller)
         throw new GraphQLError('Authorization required', {
             extensions: { code: 'FORBIDDEN' }
         });

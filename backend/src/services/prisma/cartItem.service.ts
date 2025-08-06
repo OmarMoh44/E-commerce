@@ -14,3 +14,16 @@ export async function createCartItem(product_id: number, cart_id: number, quanti
 
     }
 }
+
+export async function deleteCartItem(itemId: number, userId: number) {
+    try {
+        await prisma.cartItem.delete({
+            where: { id: itemId }
+        });
+    } catch (error) {
+        console.log("Error in removing cart item");
+        throw new GraphQLError("Error in removing cart item", {
+            extensions: { code: 'INTERNAL_SERVER_ERROR' }
+        });
+    }
+}

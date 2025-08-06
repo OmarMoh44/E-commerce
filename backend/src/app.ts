@@ -44,19 +44,20 @@ async function main() {
     app.use(cookieParser());
     app.use(
         session({
-            secret: process.env.JWT_SECRET as string, // Change this to your secret
+            secret: process.env.JWT_SECRET as string,
             resave: false,
             saveUninitialized: true,
         })
     );
 
     app.use('/graphql', expressMiddleware(server, {
+        //  this function aims to change global context through all resovlers to include some info of user in case of existed token
         context: async ({ req, res }) => {      // argument is old context
             let user = null;
             const token = getToken(req);
             if (token) {
                 try {
-                    const payload = verifyUserToken(token);
+                    const payload = verifyUserToken(token); // in case of invalid token, throw error
                     user = { id: payload.userId, role: payload.userRole };
                 } catch (err) {
                     clearTokenCookie(res);

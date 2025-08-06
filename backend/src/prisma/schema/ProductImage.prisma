@@ -1,7 +1,0 @@
-model ProductImage {
-    id         Int     @id @default(autoincrement())
-    product    Product @relation(fields: [product_id], references: [id])
-    product_id Int
-    url        String
-    alt_text   String
-}

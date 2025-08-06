@@ -10,11 +10,10 @@ export const productTypeDefs = `#graphql
         created_at: DateTime
         is_active: Boolean
 
-        seller: User!
+        seller: User
         category: Category!
-        images: [ProductImage!]!
         reviews: [Review!]!
-        oderItems: [OrderItem!]!
+        orderItems: [OrderItem!]!
         cartItems: [CartItem!]!
     }
 `;

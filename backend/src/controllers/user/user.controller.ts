@@ -1,6 +1,7 @@
 import { requireAuth } from "@middlewares/auth.middleware";
 import { requireBuyer, requireSeller } from "@middlewares/permissions.middleware";
 import { checkPassword } from "@services/auth/login.service";
+import { GraphQLError } from "graphql";
 import { findAddressByUser } from "@services/prisma/address.service";
 import { findCartByUser } from "@services/prisma/cart.service";
 import { findOrdersByUser } from "@services/prisma/order.service";
@@ -33,9 +34,9 @@ export const userUpdateResolver = {
     },
     password: async function (parent: any, args: any, context: any) {
         const { id } = requireAuth(context);
-        const { oldPassword, newPassword } = args
+        const { currentPassword, newPassword } = args
         let user = await findUserById(id);
-        checkPassword(oldPassword, user.password_hash);
+        checkPassword(currentPassword, user.password_hash);
         user = await updateUser({ password_hash: bcrypt.hashSync(newPassword, 10) }, id);
         return user;
     }
@@ -53,30 +54,55 @@ export async function userAddressResovler(parent: any, args: any, context: any) 
 
 export async function userOrdersResovler(parent: any, args: any, context: any) {
     const { id } = parent;
-    requireBuyer(context);
+    const { role } = requireAuth(context);
+    if (role !== 'Buyer') {
+        throw new GraphQLError('Authorization required', {
+            extensions: { code: 'FORBIDDEN' }
+        });
+    }
     return await findOrdersByUser(id);
 }
 
 export async function userReviewsResolver(parent: any, args: any, context: any) {
     const { id } = parent;
-    requireBuyer(context);
+    const { role } = requireAuth(context);
+    if (role !== 'Buyer') {
+        throw new GraphQLError('Authorization required', {
+            extensions: { code: 'FORBIDDEN' }
+        });
+    }
     return await findReviewsByUser(id);
 }
 
 export async function userProductsResolver(parent: any, args: any, context: any) {
     const { id } = parent;
-    requireSeller(context);
+    const { role } = requireAuth(context);
+    if (role !== 'Seller') {
+        throw new GraphQLError('Authorization required', {
+            extensions: { code: 'FORBIDDEN' }
+        });
+    }
     return await findProductsByUser(id);
 }
 
 export async function userCartResovler(parent: any, args: any, context: any) {
     const { id } = parent;
-    requireBuyer(context);
+    const { role } = requireAuth(context);
+    if (role !== 'Buyer') {
+        throw new GraphQLError('Authorization required', {
+            extensions: { code: 'FORBIDDEN' }
+        });
+    }
     return await findCartByUser(id);
 }
 
 export async function userPaymentsResovler(parent: any, args: any, context: any) {
     const { id } = parent;
-    requireBuyer(context);
+    const { role } = requireAuth(context);
+    if (role !== 'Buyer') {
+        throw new GraphQLError('Authorization required', {
+            extensions: { code: 'FORBIDDEN' }
+        });
+    }
     return await findPaymentByUser(id);
 }

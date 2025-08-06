@@ -4,5 +4,8 @@ export const queryTypeDefs = `#graphql
     orderHistory: [Order!]!
     categories: [Category!]!
     cart: Cart!
+    getProduct(id: Int!): Product
+    getUserWishlist: [WishlistItem!]!
+    isInWishlist(productId: Int!): Boolean!
   }
 `;
