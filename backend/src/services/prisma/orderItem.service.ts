@@ -1,4 +1,5 @@
 import prisma from "@DB";
+import { OrderItemData } from "@models/orderItemData";
 import { GraphQLError } from "graphql";
 
 export async function findItemsByOrder(order_id: number) {
@@ -12,4 +13,10 @@ export async function findItemsByOrder(order_id: number) {
         });
     }
     return order.items;
+}
+
+export async function createOrderItems(data: OrderItemData[]) {
+    return await prisma.orderItem.createMany({
+        data
+    });
 }

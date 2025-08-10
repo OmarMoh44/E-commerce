@@ -1,6 +1,6 @@
 import prisma from "@DB"
 import bcrypt from 'bcrypt';
-import { UserInfo } from "@models/user";
+import { UserInfo } from "@src/types/user";
 import { GraphQLError } from "graphql";
 
 

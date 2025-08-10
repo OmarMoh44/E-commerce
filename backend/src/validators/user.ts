@@ -1,4 +1,4 @@
-import { UserInfo } from "@src/models/user";
+import { UserInfo } from "@src/types/user";
 import { GraphQLError } from "graphql";
 import Joi, { ObjectSchema, ValidationError } from "joi";
 import { phone } from "phone";

@@ -1,4 +1,4 @@
-export type ProductInfo = {
+export interface ProductInfo {
     title: string;
     description: string;
     price: number;

@@ -3,7 +3,7 @@ import { requireSeller } from "@middlewares/permissions.middleware";
 import { findCategories } from "@services/prisma/category.service";
 import { createProduct, deleteProduct, updateProduct } from "@services/prisma/product.service";
 import { checkCategoryExist } from "@services/seller/product.service";
-import { ProductInfo } from "@models/product";
+import { ProductInfo } from "@src/types/product";
 import { validateProductData } from "@validators/product";
 
 

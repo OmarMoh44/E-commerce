@@ -1,6 +1,6 @@
 import { Role } from "@prisma/client";
 
-export type UserInfo = {
+export interface UserInfo {
     email: string;
     name: string;
     phone: string;

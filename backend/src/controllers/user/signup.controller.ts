@@ -1,5 +1,5 @@
 import { createUser } from "@services/prisma/user.service";
-import { UserInfo } from "@src/models/user";
+import { UserInfo } from "@src/types/user";
 import { validateSignUp } from "@validators/user"
 import { createToken, createTokenCookie } from "@services/token.service";
 import { createCart } from "@services/prisma/cart.service";

@@ -1,6 +1,6 @@
 import { Product } from "@prisma/client";
 import { findCartByUser } from "@services/prisma/cart.service";
-import { createCartItem, deleteCartItem } from "@services/prisma/cartItem.service";
+import { createCartItem, deleteCartItems } from "@services/prisma/cartItem.service";
 import { findProduct, updateProduct } from "@services/prisma/product.service";
 import { GraphQLError } from "graphql";
 import { isItemBelongToUser } from "./cartItem.service";
@@ -19,7 +19,7 @@ export async function removeFromCart(cartItem_id: number, user_id: number) {
     await findCartByUser(user_id);
     const cartItem = await isItemBelongToUser(cartItem_id, user_id);
     const product = await findProduct(cartItem.product_id);
-    await deleteCartItem(cartItem_id, user_id);
+    await deleteCartItems([cartItem_id]);
     await updateProduct({ stock: product.stock + cartItem.quantity }, product.id, product.seller_id);
     return await findCartByUser(user_id);
 }

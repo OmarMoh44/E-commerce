@@ -1,7 +1,7 @@
 import { requireAuth } from "@middlewares/auth.middleware";
 import { requireBuyer } from "@middlewares/permissions.middleware";
 import { addToCart, removeFromCart } from "@services/buyer/cart.service";
-import { findCartByUser, findCartItems } from "@services/prisma/cart.service";
+import { findCartByUser } from "@services/prisma/cart.service";
 
 export async function cartResolver(parent: any, args: any, context: any) {
     const user_id = requireAuth(context).id;
@@ -22,10 +22,3 @@ export const removeFromCartResolver = async (parent: any, args: any, context: an
     const { itemId } = args;
     return await removeFromCart(itemId, id);
 }; 
-
-export async function cartItemsResolver(parent: any, args: any, context: any) {
-    requireAuth(context);
-    requireBuyer(context);
-    const cart_id = parent.id; // Assuming parent is the Cart object
-    return await findCartItems(cart_id);
-}

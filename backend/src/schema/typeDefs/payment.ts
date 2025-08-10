@@ -7,18 +7,9 @@ export const paymentTypeDefs = `#graphql
         WALLET
     }
 
-    enum PaymentStatus {
-        PENDING
-        SUCCESS
-        FAILED
-        CANCELLED
-        REFUNDED
-    }
-
     type Payment {
         id: Int!
         payment_method: PaymentMethod!
-        payment_status: PaymentStatus!
         transaction_id: String!
         paid_at: DateTime!
 

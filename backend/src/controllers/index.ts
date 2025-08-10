@@ -6,15 +6,13 @@ import { signupResolver } from "./user/signup.controller";
 import { deleteUserResolver, userAddressResovler, userCartResovler, userOrdersResovler, userPaymentsResovler, userProductsResolver, userReviewsResolver, userUpdateResolver } from "./user/user.controller";
 import { addProductResolver, deleteProductResovler, updateProductResolver } from "./seller/product.controller";
 import { addCategoryResolver, deleteCategoryResovler, updateCategroyResolver } from "./admin/categroy.controller";
-import { orderAddressResolver, orderHistoryResovler, orderItemsResolver, orderPaymentResolver, orderUserResolver } from "./buyer/order.controller";
+import { updateOrderStatusResolver, orderAddressResolver, orderHistoryResovler, orderItemsResolver, orderPaymentResolver, orderUserResolver, processOrderResolver, trackOrderResolver, getOrdersResolver } from "./buyer/order.controller";
 import { categoriesResolver, categoryParentResolver, categoriesChildrenResolver, categoryProductsResolver } from "./user/category.controller";
-import { addToCartResolver, cartResolver, cartItemsResolver, removeFromCartResolver } from "./buyer/cart.controller";
+import { addToCartResolver, cartResolver, removeFromCartResolver } from "./buyer/cart.controller";
 import { searchProductsResolver, getProductSuggestionsResolver } from "./buyer/search.controller";
-import { getProductResolver, sellerProductsResolver } from "./buyer/product.controller";
+import { getProductResolver } from "./buyer/product.controller";
 import { addToWishlistResolver, removeFromWishlistResolver, getUserWishlistResolver, isInWishlistResolver } from "./buyer/wishlist.controller";
-// import { createPromotionResolver, getPromotionResolver, getAllPromotionsResolver, applyPromotionResolver } from "./admin/promotion.controller";
-// import { createShippingResolver, getShippingInfoResolver, getTrackingInfoResolver, updateShippingStatusResolver, addTrackingEventResolver } from "./buyer/shipping.controller";
-// import { trackPageViewResolver, trackProductViewResolver, trackSearchQueryResolver, trackConversionResolver, getAnalyticsResolver } from "./admin/analytics.controller";
+import { addReviewResolver, deleteReviewResolver, getReviewsResolver, reviewProductResolver, reviewUserResolver, updateReviewResolver } from "./buyer/review.controller";
 
 async function userResolver(parent: any, args: any, context: any) {
     const { id, role } = requireAuth(context);
@@ -34,6 +32,9 @@ export const resolvers = {
         isInWishlist: isInWishlistResolver,
         searchProducts: searchProductsResolver,
         getProductSuggestions: getProductSuggestionsResolver,
+        getReviews: getReviewsResolver,
+        trackOrder: trackOrderResolver,
+        getOrders: getOrdersResolver,
     },
     Mutation: {
         login: loginResolver,
@@ -54,9 +55,17 @@ export const resolvers = {
         deleteCategory: deleteCategoryResovler,
 
         addToCart: addToCartResolver,
+        removeFromCart: removeFromCartResolver,
+
         addToWishlist: addToWishlistResolver,
         removeFromWishlist: removeFromWishlistResolver,
-        removeFromCart: removeFromCartResolver,
+
+        addReview: addReviewResolver,
+        updateReview: updateReviewResolver,
+        deleteReview: deleteReviewResolver,
+
+        processOrder: processOrderResolver,
+        updateOrderStatus: updateOrderStatusResolver,
     },
     Order: {
         user: orderUserResolver,
@@ -77,12 +86,8 @@ export const resolvers = {
         children: categoriesChildrenResolver,
         products: categoryProductsResolver,
     },
-    Cart: {
-        user: userResolver,
-        items: cartItemsResolver,
-    },
-    Product: {
-        seller: sellerProductsResolver,
-
+    Review: {
+        user: reviewUserResolver,
+        product: reviewProductResolver,
     }
 };

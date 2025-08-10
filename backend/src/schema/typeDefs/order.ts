@@ -20,4 +20,16 @@ export const orderTypeDefs = `#graphql
         payment: Payment
         items: [OrderItem!]!
     }
+
+    type Tracking{
+        status: String!
+        message: String!
+        timestamp: DateTime!
+        location: String
+    }
+
+    type OrderTracking{
+        order: Order!
+        tracking: [Tracking!]!
+    }
 `;

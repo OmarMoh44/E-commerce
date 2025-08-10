@@ -1,18 +1,71 @@
 import prisma from "@DB";
-import { OrderStatus } from "@prisma/client";
+import { TrackingUpdate } from "@models/trackingUpdate";
+import { OrderStatus, PaymentMethod } from "@prisma/client";
 import { GraphQLError } from "graphql";
+import { findCartByUser } from "./cart.service";
+import { deleteCartItems } from "./cartItem.service";
+import { createOrderItems } from "./orderItem.service";
+import { OrderItemData } from "@models/orderItemData";
+import { createPayment } from "./payment.service";
 
-export interface TrackingUpdate {
-    status: string;
-    message: string;
-    timestamp: Date;
-    location?: string;
+
+export async function findOrdersByUser(buyerId: number) {
+    return await prisma.order.findMany({
+        where: { user_id: buyerId }
+    });
 }
 
-export async function findOrdersByUser(buyer_id: number) {
-    return await prisma.order.findMany({
-        where: { user_id: buyer_id }
+export async function createOrder(userId: number, addressId: number, totalAmount: number) {
+    try {
+        return await prisma.order.create({
+            data: {
+                user: {
+                    connect: { id: userId }
+                },
+                address: {
+                    connect: { id: addressId }
+                },
+                total_amount: totalAmount
+            }
+        });
+    } catch (e) {
+        console.log("Error in creating cart");
+        throw new GraphQLError("Error in creating cart", {
+            extensions: { code: 'INTERNAL_SERVER_ERROR' }
+        });
+    }
+
+}
+
+export async function processOrder(userId: number, paymentMethod: PaymentMethod, addressId: number) {
+    const cart = await findCartByUser(userId);
+    if (cart.items.length === 0) {
+        throw new GraphQLError("Cart is empty", {
+            extensions: { code: 'BAD_REQUEST' }
+        });
+    }
+    const cartItemIds = cart.items.map(item => item.id);
+    let totalAmount: number = 0;
+    cart.items.forEach(item => {
+        totalAmount += item.quantity * item.product.price;
     });
+
+    const order = await createOrder(userId, addressId, totalAmount);
+    await deleteCartItems(cartItemIds);
+
+    let orderItemsData: OrderItemData[] = [];
+    cart.items.forEach(item => {
+        orderItemsData.push({
+            order_id: order.id,
+            product_id: item.product_id,
+            quantity: item.quantity,
+            price_at_purchase: item.product.price
+        });
+    });
+
+    await createOrderItems(orderItemsData);
+    await createPayment(userId, order.id, paymentMethod);
+    return order;
 }
 
 export const updateOrderStatus = async (orderId: number, status: OrderStatus, userId: number) => {

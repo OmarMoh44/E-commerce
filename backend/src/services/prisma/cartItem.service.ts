@@ -4,7 +4,8 @@ import { GraphQLError } from "graphql";
 export async function createCartItem(product_id: number, cart_id: number, quantity: number) {
     try {
         return await prisma.cartItem.create({
-            data: { cart_id, product_id, quantity }
+            data: { cart_id, product_id, quantity },
+            include: { cart: true, product: true }
         });
     } catch (error) {
         console.log("Error in creating cart item");
@@ -15,10 +16,10 @@ export async function createCartItem(product_id: number, cart_id: number, quanti
     }
 }
 
-export async function deleteCartItem(itemId: number, userId: number) {
+export async function deleteCartItems(itemIds: number[]) {
     try {
-        await prisma.cartItem.delete({
-            where: { id: itemId }
+        await prisma.cartItem.deleteMany({
+            where: { id: { in: itemIds } }
         });
     } catch (error) {
         console.log("Error in removing cart item");

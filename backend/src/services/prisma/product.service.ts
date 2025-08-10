@@ -1,5 +1,5 @@
 import prisma from "@DB";
-import { ProductInfo } from "@models/product";
+import { ProductInfo } from "@src/types/product";
 import { GraphQLError } from "graphql";
 
 export async function createProduct(productData: ProductInfo, seller_id: number, category_id: number) {
@@ -55,7 +55,17 @@ export async function findProductsByUser(user_id: number) {
 }
 
 export async function findProduct(product_id: number) {
-    const product = await prisma.product.findUnique({ where: { id: product_id } });
+    const product = await prisma.product.findUnique({ 
+        where: { id: product_id },
+        include: {
+            seller: true,
+            category: true,
+            reviews: true,
+            orderItems: true,
+            cartItems: true,
+            wishlist: true
+        }
+     });
     if (!product) {
         throw new GraphQLError("Product not found", {
             extensions: { code: 'NOT_FOUND' }

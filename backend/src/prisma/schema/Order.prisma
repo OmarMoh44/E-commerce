@@ -14,7 +14,7 @@ model Order {
     user_id      Int
     address      Address     @relation(fields: [address_id], references: [id])
     address_id   Int
-    status       OrderStatus
+    status       OrderStatus @default(PENDING)
     order_date   DateTime    @default(now())
     total_amount Float
 

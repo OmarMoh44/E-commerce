@@ -1,4 +1,5 @@
 import prisma from "@DB";
+import { PaymentMethod } from "@prisma/client";
 import { GraphQLError } from "graphql";
 
 export async function findPaymentByOrder(order_id: number) {
@@ -16,4 +17,23 @@ export async function findPaymentByOrder(order_id: number) {
 
 export async function findPaymentByUser(user_id: number) {
     return await prisma.payment.findMany({ where: { user_id } });
+}
+
+export async function createPayment(userId: number, orderId: number, paymentMethod: PaymentMethod) {
+    try {
+        return await prisma.payment.create({
+            data: {
+                user: { connect: { id: userId } },
+                order: { connect: { id: orderId } },
+                payment_method: paymentMethod
+            },
+            include: { order: true }
+        });
+    } catch (error) {
+        console.error("Error in creating payment", error);
+        throw new GraphQLError("Error in creating payment", {
+            extensions: { code: 'INTERNAL_SERVER_ERROR' }
+        });
+    }
+
 }

@@ -8,15 +8,6 @@ export const mutationTypeDefs = `#graphql
     role: Role!
   }
 
-  input UserDetails{
-    name: String
-    email: String
-    password: String
-    confirmPassword: String
-    phone: String
-    role: Role
-  }
-
   input ProductData{
     title: String!
     description: String!
@@ -60,6 +51,13 @@ export const mutationTypeDefs = `#graphql
     
     addToWishlist(productId: Int!): WishlistItem!
     removeFromWishlist(productId: Int!): WishlistResponse!
+
+    addReview(product_id: Int!, rating: Int!, comment: String!): Review!
+    updateReview(review_id: Int!, rating: Int, comment: String): Review!
+    deleteReview(review_id: Int!): String!
+
+    processCart(paymentMethod: PaymentMethod!, address_id: Int!): Order!
+    updateOrderStatus(order_id: Int!, order_status: OrderStatus!): Order!
 
   }
 `;

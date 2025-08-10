@@ -1,4 +1,4 @@
-import { ProductInfo } from "@models/product";
+import { ProductInfo } from "@src/types/product";
 import { GraphQLError } from "graphql";
 import Joi, { ObjectSchema, ValidationError } from "joi";
 

@@ -7,5 +7,8 @@ export const queryTypeDefs = `#graphql
     getProduct(id: Int!): Product
     getUserWishlist: [WishlistItem!]!
     isInWishlist(productId: Int!): Boolean!
+    getReviews(productId: Int!): [Review!]!
+    trackOrder(order_id: Int!): OrderTracking!
+    getOrders(order_status: OrderStatus!): [Order!]!
   }
 `;
