@@ -5,6 +5,20 @@ export const addToWishlist = async (userId: number, productId: number) => {
         data: {
             user_id: userId,
             product_id: productId
+        },
+        include: { 
+            user: true, 
+            product: {
+                include: {
+                    seller: true,
+                    category: true,
+                    reviews: {
+                        include: {
+                            user: true
+                        }
+                    }
+                }
+            }
         }
     });
     return wishlistItem;
@@ -28,6 +42,20 @@ export const getUserWishlist = async (userId: number) => {
         orderBy: {
             created_at: 'desc'
         },
+        include: {
+            user: true,
+            product: {
+                include: {
+                    seller: true,
+                    category: true,
+                    reviews: {
+                        include: {
+                            user: true
+                        }
+                    }
+                }
+            }
+        }
     });
     return wishlist;
 };

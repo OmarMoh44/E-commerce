@@ -6,7 +6,7 @@ import { findItemsByOrder } from "@services/prisma/orderItem.service";
 import { findPaymentByOrder } from "@services/prisma/payment.service";
 import { findUserByOrder } from "@services/prisma/user.service";
 
-export async function orderHistoryResovler(parent: any, args: any, context: any) {
+export async function orderHistoryResolver(parent: any, args: any, context: any) {
     const { id } = requireAuth(context);
     requireBuyer(context);
     return await findOrdersByUser(id);

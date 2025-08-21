@@ -3,20 +3,34 @@ import { PaymentMethod } from "@prisma/client";
 import { GraphQLError } from "graphql";
 
 export async function findPaymentByOrder(order_id: number) {
-    const order = await prisma.order.findUnique({
-        where: { id: order_id },
-        include: { payment: true }
+    // const order = await prisma.order.findUnique({
+    //     where: { id: order_id },
+    //     include: { payment: true }
+    // });
+    // if (!order) {
+    //     throw new GraphQLError("Order not found", {
+    //         extensions: { code: 'NOT_FOUND' }
+    //     });
+    // }
+    // return order.payment;
+    const payment = await prisma.payment.findFirst({
+        where: {
+            order: {
+                id: order_id
+            }
+        },
+        include: { order: true, user: true }
     });
-    if (!order) {
-        throw new GraphQLError("Order not found", {
-            extensions: { code: 'NOT_FOUND' }
-        });
-    }
-    return order.payment;
 }
 
 export async function findPaymentByUser(user_id: number) {
-    return await prisma.payment.findMany({ where: { user_id } });
+    return await prisma.payment.findMany({
+        where: { user_id },
+        include: {
+            user: true,
+            order: true
+        }
+    });
 }
 
 export async function createPayment(userId: number, orderId: number, paymentMethod: PaymentMethod) {
@@ -27,7 +41,7 @@ export async function createPayment(userId: number, orderId: number, paymentMeth
                 order: { connect: { id: orderId } },
                 payment_method: paymentMethod
             },
-            include: { order: true }
+            include: { order: true, user: true }
         });
     } catch (error) {
         console.error("Error in creating payment", error);

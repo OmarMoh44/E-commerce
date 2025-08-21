@@ -65,7 +65,19 @@ export async function processOrder(userId: number, paymentMethod: PaymentMethod,
 
     await createOrderItems(orderItemsData);
     await createPayment(userId, order.id, paymentMethod);
-    return order;
+    return await prisma.order.findUnique({
+        where: { id: order.id },
+        include: {
+            user: true,
+            address: true,
+            items: {
+                include: {
+                    product: true
+                }
+            },
+            payment: true
+        }
+    });
 }
 
 export const updateOrderStatus = async (orderId: number, status: OrderStatus, userId: number) => {
@@ -185,7 +197,7 @@ export const getOrderTrackingInfo = async (orderId: number, userId: number) => {
 
         return {
             order,
-            trackingUpdates
+            tracking: trackingUpdates
         };
     } catch (error) {
         console.error('Error getting order tracking info:', error);
@@ -195,7 +207,7 @@ export const getOrderTrackingInfo = async (orderId: number, userId: number) => {
     }
 };
 
-export const getOrdersByStatus = async (status: OrderStatus, userId: number) => {
+export const getOrdersByStatus = async (userId: number, status: OrderStatus) => {
     try {
         const orders = await prisma.order.findMany({
             where: {

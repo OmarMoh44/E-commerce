@@ -28,13 +28,9 @@ async function main() {
 
     app.use(
         cors({
-            origin: function (origin, callback) {
-                if (origin) {
-                    callback(null, origin);
-                } else {
-                    callback(null, "*");
-                }
-            },
+            origin: process.env.NODE_ENV === 'production' 
+                ? process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000']
+                : ['http://localhost:3000', 'http://127.0.0.1:3000'],
             credentials: true,
             optionsSuccessStatus: 200,
         })

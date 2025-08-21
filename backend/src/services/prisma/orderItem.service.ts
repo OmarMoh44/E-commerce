@@ -3,16 +3,27 @@ import { OrderItemData } from "@models/orderItemData";
 import { GraphQLError } from "graphql";
 
 export async function findItemsByOrder(order_id: number) {
-    const order = await prisma.order.findUnique({
-        where: { id: order_id },
-        include: { items: true }
+    // const order = await prisma.order.findUnique({
+    //     where: { id: order_id },
+    //     include: { items: true }
+    // });
+    // if (!order) {
+    //     throw new GraphQLError("Order not found", {
+    //         extensions: { code: 'NOT_FOUND' }
+    //     });
+    // }
+    // return order.items;
+    const items = await prisma.orderItem.findMany({
+        where: {
+            order: {
+                id: order_id
+            }
+        },
+        include: {
+            order: true,
+            product: true
+        }
     });
-    if (!order) {
-        throw new GraphQLError("Order not found", {
-            extensions: { code: 'NOT_FOUND' }
-        });
-    }
-    return order.items;
 }
 
 export async function createOrderItems(data: OrderItemData[]) {

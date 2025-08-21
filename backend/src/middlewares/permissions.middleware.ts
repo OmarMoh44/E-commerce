@@ -9,7 +9,6 @@ const requireAdmin = (context: any) => {
 }
 
 const requireBuyer = (context: any) => {
-    console.log(context.user.role)
     if (context.user.role !== Role.Buyer)
         throw new GraphQLError('Authorization required', {
             extensions: { code: 'FORBIDDEN' }

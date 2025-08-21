@@ -17,6 +17,7 @@ async function main() {
                     password_hash: hashedPassword,
                     phone: faker.phone.number(),
                     role: Role.Buyer,
+                    cart: {}
                 },
             });
         })

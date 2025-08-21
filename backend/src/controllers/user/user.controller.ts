@@ -9,6 +9,7 @@ import { findProductsByUser } from "@services/prisma/product.service";
 import { findReviewsByUser } from "@services/prisma/review.service";
 import { deleteUser, findUserById, updateUser } from "@services/prisma/user.service";
 import { validateName, validateEmail, validatePhoneNumber } from "@validators/user";
+import { Role } from "@prisma/client";
 import bcrypt from 'bcrypt';
 
 
@@ -46,42 +47,57 @@ export async function deleteUserResolver(parent: any, args: any, context: any) {
     return await deleteUser(id);
 }
 
-export async function userAddressResovler(parent: any, args: any, context: any) {
+export async function userAddressResolver(parent: any, args: any, context: any) {
     const { id } = parent;
     return await findAddressByUser(id);
 }
 
-export async function userOrdersResovler(parent: any, args: any, context: any) {
+export async function userOrdersResolver(parent: any, args: any, context: any) {
     const { id } = parent;
-    requireAuth(context);
-    requireBuyer(context);
+    const user = requireAuth(context);
+    // Only return orders if the user is a buyer, otherwise return empty array
+    if (user.role !== Role.Buyer) {
+        return [];
+    }
     return await findOrdersByUser(id);
 }
 
 export async function userReviewsResolver(parent: any, args: any, context: any) {
     const { id } = parent;
-    requireAuth(context);
-    requireBuyer(context);
+    const user = requireAuth(context);
+    // Only return reviews if the user is a buyer, otherwise return empty array
+    if (user.role !== Role.Buyer) {
+        return [];
+    }
     return await findReviewsByUser(id);
 }
 
 export async function userProductsResolver(parent: any, args: any, context: any) {
     const { id } = parent;
-    requireAuth(context);
-    requireSeller(context);
+    const user = requireAuth(context);
+    // Only return products if the user is a seller, otherwise return empty array
+    if (user.role !== Role.Seller) {
+        return [];
+    }
     return await findProductsByUser(id);
 }
 
-export async function userCartResovler(parent: any, args: any, context: any) {
+export async function userCartResolver(parent: any, args: any, context: any) {
     const { id } = parent;
-    requireAuth(context);
-    requireBuyer(context);
+    const user = requireAuth(context);
+    // Only return cart if the user is a buyer, otherwise return null
+    if (user.role !== Role.Buyer) {
+        return null;
+    }
     return await findCartByUser(id);
 }
 
-export async function userPaymentsResovler(parent: any, args: any, context: any) {
+export async function userPaymentsResolver(parent: any, args: any, context: any) {
     const { id } = parent;
-    requireAuth(context);
-    requireBuyer(context);
+    const user = requireAuth(context);
+    // Only return payments if the user is a buyer, otherwise return empty array
+    if (user.role !== Role.Buyer) {
+        return [];
+    }
     return await findPaymentByUser(id);
 }

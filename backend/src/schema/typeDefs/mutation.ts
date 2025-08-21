@@ -28,6 +28,14 @@ export const mutationTypeDefs = `#graphql
     brand: String
   }
 
+  input AddressData{
+    full_name: String!
+    city: String!
+    country: String!
+    phone: String!
+    is_default: Boolean
+  }
+
   type Mutation {
     login(email: String!, password: String!): User!
     logout: User
@@ -56,7 +64,11 @@ export const mutationTypeDefs = `#graphql
     updateReview(review_id: Int!, rating: Int, comment: String): Review!
     deleteReview(review_id: Int!): String!
 
-    processCart(paymentMethod: PaymentMethod!, address_id: Int!): Order!
+    createAddress(data: AddressData!): Address!
+    updateAddress(address_id: Int!, data: AddressData!): Address!
+    deleteAddress(address_id: Int!): Address!
+
+    processOrder(paymentMethod: PaymentMethod!, address_id: Int!): Order!
     updateOrderStatus(order_id: Int!, order_status: OrderStatus!): Order!
 
   }

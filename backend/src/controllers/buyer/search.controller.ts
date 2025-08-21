@@ -3,17 +3,17 @@ import { searchProducts } from "@services/prisma/product.service";
 
 export const searchProductsResolver = async (parent: any, args: any, context: any) => {
     const { id } = requireAuth(context);
-    const { 
-        query, 
-        categoryId, 
-        minPrice, 
-        maxPrice, 
-        brand, 
-        sortBy = 'created_at', 
-        sortOrder = 'desc', 
-        page = 1, 
-        limit = 12 
-    } = args;
+    const {
+        query,
+        categoryId,
+        minPrice,
+        maxPrice,
+        brand,
+        sortBy = 'created_at',
+        sortOrder = 'desc',
+        page = 1,
+        limit = 12
+    } = args.filters;
 
     const products = await searchProducts({
         query,

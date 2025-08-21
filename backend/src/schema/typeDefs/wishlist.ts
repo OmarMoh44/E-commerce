@@ -11,14 +11,4 @@ export const wishlistTypeDefs = `#graphql
     success: Boolean!
     message: String
   }
-
-  extend type Query {
-    getUserWishlist: [WishlistItem!]!
-    isInWishlist(productId: Int!): Boolean!
-  }
-
-  extend type Mutation {
-    addToWishlist(productId: Int!): WishlistItem!
-    removeFromWishlist(productId: Int!): WishlistResponse!
-  }
 `; 

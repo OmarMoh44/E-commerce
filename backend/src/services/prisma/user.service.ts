@@ -54,7 +54,8 @@ export async function createUser(userDate: UserInfo) {
             }
         })
         return user;
-    } catch (err) {
+    } catch (err: any) {
+        console.log(err.message);
         console.log('Error in creating user account');
         throw new GraphQLError("Error in creating user account", {
             extensions: { code: 'INTERNAL_SERVER_ERROR' }

@@ -51,11 +51,21 @@ export async function updateProduct(data: any, product_id: number, seller_id: nu
 }
 
 export async function findProductsByUser(user_id: number) {
-    return await prisma.product.findMany({ where: { seller_id: user_id } });
+    return await prisma.product.findMany({
+        where: { seller_id: user_id },
+        include: {
+            seller: true,
+            category: true,
+            reviews: true,
+            orderItems: true,
+            cartItems: true,
+            wishlist: true
+        }
+    });
 }
 
 export async function findProduct(product_id: number) {
-    const product = await prisma.product.findUnique({ 
+    const product = await prisma.product.findUnique({
         where: { id: product_id },
         include: {
             seller: true,
@@ -65,7 +75,7 @@ export async function findProduct(product_id: number) {
             cartItems: true,
             wishlist: true
         }
-     });
+    });
     if (!product) {
         throw new GraphQLError("Product not found", {
             extensions: { code: 'NOT_FOUND' }
@@ -77,6 +87,14 @@ export async function findProduct(product_id: number) {
 export async function findProductsByCategory(category_id: number) {
     return await prisma.product.findMany({
         where: { category_id, is_active: true },
+        include: {
+            seller: true,
+            category: true,
+            reviews: true,
+            orderItems: true,
+            cartItems: true,
+            wishlist: true
+        }
     })
 }
 
@@ -107,7 +125,7 @@ export async function searchProducts({
     // Design query options using provided search filters
 
     const skip = (page - 1) * limit;
-    
+
     const where: any = {
         is_active: true
     };
@@ -135,12 +153,19 @@ export async function searchProducts({
     if (brand) {
         where.brand = { contains: brand, mode: 'insensitive' };
     }
-
     const orderBy: any = {};
     orderBy[sortBy] = sortOrder;
 
     const products = await prisma.product.findMany({
         where,
+        include: {
+            seller: true,
+            category: true,
+            reviews: true,
+            orderItems: true,
+            cartItems: true,
+            wishlist: true
+        },
         orderBy,
         skip,
         take: limit

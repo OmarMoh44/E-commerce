@@ -10,5 +10,7 @@ export const queryTypeDefs = `#graphql
     getReviews(productId: Int!): [Review!]!
     trackOrder(order_id: Int!): OrderTracking!
     getOrders(order_status: OrderStatus!): [Order!]!
+    getUserAddresses: [Address!]!
+    getAddress(address_id: Int!): Address!
   }
 `;

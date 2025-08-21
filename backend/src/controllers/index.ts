@@ -3,20 +3,20 @@ import { requireAuth } from "@middlewares/auth.middleware";
 import { loginResolver } from "./user/login.controller";
 import { logoutResolver } from "./user/logout.controller";
 import { signupResolver } from "./user/signup.controller";
-import { deleteUserResolver, userAddressResovler, userCartResovler, userOrdersResovler, userPaymentsResovler, userProductsResolver, userReviewsResolver, userUpdateResolver } from "./user/user.controller";
-import { addProductResolver, deleteProductResovler, updateProductResolver } from "./seller/product.controller";
-import { addCategoryResolver, deleteCategoryResovler, updateCategroyResolver } from "./admin/categroy.controller";
-import { updateOrderStatusResolver, orderAddressResolver, orderHistoryResovler, orderItemsResolver, orderPaymentResolver, orderUserResolver, processOrderResolver, trackOrderResolver, getOrdersResolver } from "./buyer/order.controller";
+import { deleteUserResolver, userAddressResolver, userCartResolver, userOrdersResolver, userPaymentsResolver, userProductsResolver, userReviewsResolver, userUpdateResolver } from "./user/user.controller";
+import { addProductResolver, deleteProductResolver, updateProductResolver } from "./seller/product.controller";
+import { addCategoryResolver, deleteCategoryResolver, updateCategoryResolver } from "./admin/category.controller";
+import { updateOrderStatusResolver, orderAddressResolver, orderHistoryResolver, orderItemsResolver, orderPaymentResolver, orderUserResolver, processOrderResolver, trackOrderResolver, getOrdersResolver } from "./buyer/order.controller";
 import { categoriesResolver, categoryParentResolver, categoriesChildrenResolver, categoryProductsResolver } from "./user/category.controller";
 import { addToCartResolver, cartResolver, removeFromCartResolver } from "./buyer/cart.controller";
 import { searchProductsResolver, getProductSuggestionsResolver } from "./buyer/search.controller";
-import { getProductResolver } from "./buyer/product.controller";
+import { getProductResolver, productCategoryResolver, productSellerResolver } from "./buyer/product.controller";
 import { addToWishlistResolver, removeFromWishlistResolver, getUserWishlistResolver, isInWishlistResolver } from "./buyer/wishlist.controller";
 import { addReviewResolver, deleteReviewResolver, getReviewsResolver, reviewProductResolver, reviewUserResolver, updateReviewResolver } from "./buyer/review.controller";
+import { createAddressResolver, deleteAddressResolver, getAddressResolver, getUserAddressesResolver, updateAddressResolver } from "./user/address.controller";
 
 async function userResolver(parent: any, args: any, context: any) {
     const { id, role } = requireAuth(context);
-    console.log(id)
     const user = await findUserById(id);
     return user;
 }
@@ -24,7 +24,7 @@ async function userResolver(parent: any, args: any, context: any) {
 export const resolvers = {
     Query: {
         user: userResolver,
-        orderHistory: orderHistoryResovler,
+        orderHistory: orderHistoryResolver,
         categories: categoriesResolver,
         cart: cartResolver,
         getProduct: getProductResolver,
@@ -35,6 +35,8 @@ export const resolvers = {
         getReviews: getReviewsResolver,
         trackOrder: trackOrderResolver,
         getOrders: getOrdersResolver,
+        getUserAddresses: getUserAddressesResolver,
+        getAddress: getAddressResolver,
     },
     Mutation: {
         login: loginResolver,
@@ -47,12 +49,12 @@ export const resolvers = {
         deleteUser: deleteUserResolver,
 
         addProduct: addProductResolver,
-        deleteProduct: deleteProductResovler,
+        deleteProduct: deleteProductResolver,
         updateProduct: updateProductResolver,
 
         addCategory: addCategoryResolver,
-        updateCategoryName: updateCategroyResolver,
-        deleteCategory: deleteCategoryResovler,
+        updateCategoryName: updateCategoryResolver,
+        deleteCategory: deleteCategoryResolver,
 
         addToCart: addToCartResolver,
         removeFromCart: removeFromCartResolver,
@@ -64,6 +66,10 @@ export const resolvers = {
         updateReview: updateReviewResolver,
         deleteReview: deleteReviewResolver,
 
+        createAddress: createAddressResolver,
+        updateAddress: updateAddressResolver,
+        deleteAddress: deleteAddressResolver,
+
         processOrder: processOrderResolver,
         updateOrderStatus: updateOrderStatusResolver,
     },
@@ -74,12 +80,12 @@ export const resolvers = {
         items: orderItemsResolver,
     },
     User: {
-        addresses: userAddressResovler,
-        orders: userOrdersResovler,
+        addresses: userAddressResolver,
+        orders: userOrdersResolver,
         reviews: userReviewsResolver,
         products: userProductsResolver,
-        cart: userCartResovler,
-        payments: userPaymentsResovler,
+        cart: userCartResolver,
+        payments: userPaymentsResolver,
     },
     Category: {
         parent: categoryParentResolver,

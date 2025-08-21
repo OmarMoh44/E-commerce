@@ -13,7 +13,6 @@ export async function getReviewsResolver(parent: any, args: any, context: any) {
 
 export async function reviewUserResolver(parent: any, args: any, context: any) {
     const { user_id } = parent;
-    console.log(parent);
     requireAuth(context);
     requireBuyer(context);
     return await findUserById(user_id);
@@ -21,7 +20,6 @@ export async function reviewUserResolver(parent: any, args: any, context: any) {
 
 export async function reviewProductResolver(parent: any, args: any, context: any) {
     const { product_id } = parent;
-    console.log(parent);
     requireAuth(context);
     requireBuyer(context);
     return await findProduct(product_id);

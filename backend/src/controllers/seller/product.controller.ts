@@ -8,7 +8,7 @@ import { validateProductData } from "@validators/product";
 
 
 export async function addProductResolver(parent: any, args: any, context: any) {
-    const { id, role } = requireAuth(context);
+    const { id } = requireAuth(context);
     requireSeller(context);
     const productData: ProductInfo = args.data;
     validateProductData(productData);
@@ -19,15 +19,15 @@ export async function addProductResolver(parent: any, args: any, context: any) {
     return await createProduct(productData, id, category_id);
 }
 
-export async function deleteProductResovler(parent: any, args: any, context: any) {
-    const { id, role } = requireAuth(context);
+export async function deleteProductResolver(parent: any, args: any, context: any) {
+    const { id } = requireAuth(context);
     requireSeller(context);
     const { product_id }: { product_id: number } = args;
     return await deleteProduct(product_id, id);
 }
 
 export async function updateProductResolver(parent: any, args: any, context: any) {
-    const { id, role } = requireAuth(context);
+    const { id } = requireAuth(context);
     requireSeller(context);
     const { details, product_id } = args;
     return await updateProduct(details, product_id, id);
